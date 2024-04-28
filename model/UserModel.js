@@ -8,7 +8,7 @@ const [schema, options] = [
     },
     email: {
       type: String,
-      required: [true, "名稱 未填寫"],
+      required: [true, "信箱 未填寫"],
       select: false,
     },
     photo: {
@@ -29,4 +29,4 @@ const [schema, options] = [
 const userSchema = new mongoose.Schema(schema, options); // 設定Schema
 const User = mongoose.model("user", userSchema); // 關聯
 
-module.exports = { User };
+module.exports = User;

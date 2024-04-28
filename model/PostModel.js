@@ -20,27 +20,7 @@ const [schema, options] = [
     createdAt: {
       type: Date,
       default: Date.now,
-    },
-    // name: {
-    //   type: String,
-    //   required: [true, "名稱 未填寫"],
-    // },
-    // likes: {
-    //   type: Number,
-    //   default: 0,
-    // },
-    // comments: {
-    //   type: Number,
-    //   default: 0,
-    // },
-    // type: {
-    //   type: String,
-    //   required: [true, "類別 未填寫"],
-    // },
-    // tags: {
-    //   type: [String],
-    //   default: [],
-    // },
+    }
   },
   {
     versionKey: false,
@@ -50,4 +30,4 @@ const [schema, options] = [
 const postSchema = new mongoose.Schema(schema, options); // 設定Schema
 const Post = mongoose.model("post", postSchema); // 關聯
 
-module.exports = { Post };
+module.exports = Post ;

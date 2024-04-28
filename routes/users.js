@@ -1,22 +1,14 @@
-const { resSuccessWrite, resFaildWrite } = require("../module/resModule");
-const { User } = require("../model/UserModel");
+const express = require("express");
+const userRouter = express.Router();
+const { resSuccessWrite } = require("../module/resModule");
+const User = require("../model/UserModel");
+const handErrorAsync = require("../service/handErrorAsync");
 
-class userClass {
-  constructor(app) {
-    this.app = app;
-    this.User = User;
-  }
 
-  getUser() {
-    this.app.get("/user", async (req, res) => {
-      try {
-        const data = await this.User.find();
-        resSuccessWrite(res, 200, data);
-      } catch (error) {
-        resFaildWrite(res, 400, "請求出錯!!!");
-      }
-    });
-  }
-}
+userRouter.get("/user",handErrorAsync(async (req, res, next) => {
+    const data = await User.find();
+    resSuccessWrite(res, 200, data);
+  } 
+));
 
-module.exports = { userClass };
+module.exports = userRouter;
