@@ -12,6 +12,9 @@ app.use(cors());
 app.use(logger('dev'));
 app.use(postRouter)
 app.use(userRouter)
+app.get("/:notfoundrouter", (req, res) => {
+  res.send(`找不到 ${req.params.notfoundrouter} 路徑`);
+});
 
 // 引用環境變數檔
 dotenv.config({ path: "./config.env" });
@@ -48,18 +51,6 @@ app.use(function (err, req, res, next) {
   }
   resErrorProd(err, res)
 })
-
-app.get("/:notfoundrouter", (req, res) => {
-  res.send(`找不到 ${req.params.notfoundrouter} 路徑`);
-});
-
-app.use((req, res) => {
-  if (req.method === "OPTIONS") {
-    res.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.status(200).send("options 200");
-  }
-});
 
 // 未捕捉到的 catch 
 // 記錄於後端 log 上

@@ -10,7 +10,7 @@ postRouter.get(`/post`, handErrorAsync(async (req, res) => {
     const timeSort = req.query.timeSort == "asc" ? "createdAt" : "-createdAt"
     const q = req.query.q !== undefined ? { "content": new RegExp(req.query.q) } : {};
     const data = await Post.find(q).populate({
-      path: "user1",
+      path: "user",
       select: "name photo",
     }).sort(timeSort);
     resSuccessWrite(res, 200, data);
