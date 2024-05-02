@@ -2,15 +2,15 @@
 const resErrorProd = (err, res) => {
   if (err.isOperational) {
     res.status(err.statusCode).json({
-      message: err.message
+      message: err.message,
     });
   } else {
     // 菲欄位驗證的其餘錯誤
     // 後端印出 log 紀錄
-    console.error('出現重大錯誤', err);
+    console.error("出現重大錯誤", err);
     res.status(500).json({
-      status: 'error',
-      message: '系統錯誤，請恰系統管理員'
+      status: "error",
+      message: "系統錯誤，請恰系統管理員",
     });
   }
 };
@@ -20,8 +20,8 @@ const resErrorDev = (err, res) => {
   res.status(err.statusCode).json({
     message: err.message,
     error: err,
-    stack: err.stack
+    stack: err.stack,
   });
 };
 
-module.exports = { resErrorProd, resErrorDev }
+module.exports = { resErrorProd, resErrorDev };

@@ -1,6 +1,8 @@
+const appError = require("../service/appError");
+
 // patch 驗證 key 是否有另外屬性
 const keyArray = [
-  "name",
+  "user",
   "content",
   "type",
   "image",
@@ -9,10 +11,10 @@ const keyArray = [
   "tags",
 ];
 
-function validateKey(keyParams) {
+function validateKey(keyParams, next) {
   for (const key of keyParams) {
-    if (!keyArray.includes(key)) throw new Error();
+    if (!keyArray.includes(key)) return next(appError(400, "有非規定屬性值"));
   }
 }
 
-module.exports = { validateKey };
+module.exports = validateKey;

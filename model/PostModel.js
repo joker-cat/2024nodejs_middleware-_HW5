@@ -7,7 +7,7 @@ const [schema, options] = [
     user: {
       type: mongoose.Schema.ObjectId,
       ref: "user",
-      required: [true, "編號 未填寫"],
+      required: [true, "關聯編號 未填寫"],
     },
     image: {
       type: String,
@@ -20,7 +20,23 @@ const [schema, options] = [
     createdAt: {
       type: Date,
       default: Date.now,
-    }
+    },
+    likes: {
+      type: Number,
+      default: 0,
+    },
+    comments: {
+      type: Number,
+      default: 0,
+    },
+    type: {
+      type: String,
+      required: [true, "類別 未填寫"],
+    },
+    tags: {
+      type: [String],
+      default: [],
+    },
   },
   {
     versionKey: false,
@@ -30,4 +46,4 @@ const [schema, options] = [
 const postSchema = new mongoose.Schema(schema, options); // 設定Schema
 const Post = mongoose.model("post", postSchema); // 關聯
 
-module.exports = Post ;
+module.exports = Post;

@@ -1,19 +1,19 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
-const cors = require('cors');
-const logger = require('morgan');
+const cors = require("cors");
+const logger = require("morgan");
 const postRouter = require("./routes/posts");
 const userRouter = require("./routes/users");
 const { resErrorProd, resErrorDev } = require("./service/nodeEnvError");
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use(logger('dev'));
-app.use(postRouter)
-app.use(userRouter)
-app.get("/:notfoundrouter", (req, res) => {
-  res.send(`找不到 ${req.params.notfoundrouter} 路徑`);
+app.use(logger("dev"));
+app.use(postRouter);
+app.use(userRouter);
+app.all("*", (req, res) => {
+  res.send(`找不到 ${req.originalUrl} 路徑`);
 });
 
 // 引用環境變數檔
@@ -21,7 +21,7 @@ dotenv.config({ path: "./config.env" });
 const dbUrl = process.env.URL.replace("<password>", process.env.PASSWORD);
 
 // 本地測試
-// .connect('mongodb://127.0.0.1:27017/nodejs_homework4')
+// .connect("mongodb://127.0.0.1:27017/nodejs_homework5")
 mongoose
   .connect(dbUrl)
   .then(() => console.log("資料庫連線成功"))
@@ -30,13 +30,13 @@ mongoose
 app.use(function (err, req, res, next) {
   // dev
   err.statusCode = err.statusCode || 500;
-  if (process.env.NODE_ENV === 'dev') {
+  if (process.env.NODE_ENV === "dev") {
     return resErrorDev(err, res);
   }
 
   // production
   // 如果錯誤名稱為欄位驗證
-  if (err.name === 'ValidationError') {
+  if (err.name === "ValidationError") {
     const errorObj = err.errors;
     const errorArray = [];
     for (const iError in errorObj) {
@@ -47,20 +47,20 @@ app.use(function (err, req, res, next) {
     }
     err.message = errorArray;
     err.isOperational = true; // 表示為欄位驗證錯誤
-    return resErrorProd(err, res)
+    return resErrorProd(err, res);
   }
-  resErrorProd(err, res)
-})
+  resErrorProd(err, res);
+});
 
-// 未捕捉到的 catch 
+// 未捕捉到的 catch
 // 記錄於後端 log 上
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('未捕捉到的 rejection：', promise, '原因：', reason);
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("未捕捉到的 rejection：", promise, "原因：", reason);
 });
 
 // 記錄錯誤下來，等到服務都處理完後，停掉該 process
-process.on('uncaughtException', err => {
-  console.error('Uncaughted Exception！')
+process.on("uncaughtException", (err) => {
+  console.error("Uncaughted Exception！");
   console.log(err.name);
   console.log(err.message);
   console.error(err);
