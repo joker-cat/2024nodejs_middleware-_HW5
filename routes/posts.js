@@ -10,8 +10,7 @@ const handErrorAsync = require("../service/handErrorAsync");
 
 postRouter.get(`/post`, handErrorAsync(async (req, res) => {
   const timeSort = req.query.timeSort == "asc" ? "createdAt" : "-createdAt";
-  const q =
-    req.query.q !== undefined ? { content: new RegExp(req.query.q) } : {};
+  const q = req.query.q !== undefined ? { content: new RegExp(req.query.q) } : {};
   const data = await Post.find(q)
     .populate({
       path: "user",
@@ -35,7 +34,6 @@ postRouter.post("/post", handErrorAsync(async (req, res, next) => {
 postRouter.patch("/post/:postId", handErrorAsync(async (req, res, next) => {
   const reqObj = req.body;
   validateKey(Object.keys(reqObj), next);
-  console.log(333);
   const postId = req.params.postId.trim();
   const isNull = await Post.findByIdAndUpdate(postId, reqObj);
   if (isNull === null) return next(appError(400, "找不到資料"));
