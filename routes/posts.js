@@ -33,15 +33,12 @@ postRouter.post("/post", handErrorAsync(async (req, res, next) => {
 
 postRouter.patch("/post/:postId", handErrorAsync(async (req, res, next) => {
   const reqObj = req.body;
-  validateKey(Object.keys(reqObj), next);
   const postId = req.params.postId.trim();
+  const notFountKey = validateKey(Object.keys(reqObj));
+  if (notFountKey?.name === 'Error') return next(notFountKey);
   const isNull = await Post.findByIdAndUpdate(postId, reqObj);
   if (isNull === null) return next(appError(400, "找不到資料"));
-  resSuccessWrite(res, 200, isNull);
-  return;
-
-  const newPost = await Post.create(req.body);
-  resSuccessWrite(res, 200, newPost);
+  resSuccessWrite(res, 200, { message: "更新成功" });
 })
 );
 

@@ -11,10 +11,11 @@ const keyArray = [
   "tags",
 ];
 
-function validateKey(keyParams, next) {
+function validateKey(keyParams) {
   for (const key of keyParams) {
-    if (!keyArray.includes(key)) return next(appError(400, "有非規定屬性值"));
+    if (!keyArray.includes(key)) return appError(400, "有非規定屬性值");
   }
+  return true;
 }
 
 module.exports = validateKey;
