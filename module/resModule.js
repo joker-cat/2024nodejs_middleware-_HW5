@@ -1,8 +1,7 @@
 function resSuccessWrite(res, status, data) {
-  res.status(status).json({
-    status,
-    data,
-  });
+  const isArray = Array.isArray(data);
+  const resObj = isArray ? { status, data } : { status, message: data };
+  res.status(status).json(resObj);
 }
 
 function resFaildWrite(res, status, message) {

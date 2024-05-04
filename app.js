@@ -16,15 +16,31 @@ app.all("*", (req, res) => {
   res.send(`找不到 ${req.originalUrl} 路徑`);
 });
 
+// 未捕捉到的 catch
+// 記錄於後端 log 上
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("未捕捉到的 rejection：", promise, "原因：", reason);
+});
+
+// 記錄錯誤下來，等到服務都處理完後，停掉該 process
+process.on("uncaughtException", (err) => {
+  console.error("Uncaughted Exception！");
+  console.log(err.name);
+  console.log(err.message);
+  console.error(err);
+  process.exit(1);
+});
+
 // 引用環境變數檔
 dotenv.config({ path: "./config.env" });
+// 遠端資料庫
 const dbUrl = process.env.URL.replace("<password>", process.env.PASSWORD);
-
 // 本地測試
-// .connect(dbUrl)
+const localUrl = process.env.LOCAL_URL;
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/nodejs_homework5")
+  // .connect(dbUrl)
+  .connect(localUrl)
   .then(() => console.log("資料庫連線成功"))
   .catch(() => console.error("資料庫連線失敗"));
 
@@ -51,21 +67,6 @@ app.use(function (err, req, res, next) {
     return resErrorProd(err, res);
   }
   resErrorProd(err, res);
-});
-
-// 未捕捉到的 catch
-// 記錄於後端 log 上
-process.on("unhandledRejection", (reason, promise) => {
-  console.error("未捕捉到的 rejection：", promise, "原因：", reason);
-});
-
-// 記錄錯誤下來，等到服務都處理完後，停掉該 process
-process.on("uncaughtException", (err) => {
-  console.error("Uncaughted Exception！");
-  console.log(err.name);
-  console.log(err.message);
-  console.error(err);
-  process.exit(1);
 });
 
 module.exports = app;
