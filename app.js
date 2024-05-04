@@ -39,8 +39,8 @@ const dbUrl = process.env.URL.replace("<password>", process.env.PASSWORD);
 const localUrl = process.env.LOCAL_URL;
 
 mongoose
-  // .connect(dbUrl)
-  .connect(localUrl)
+  // .connect(localUrl)
+  .connect(dbUrl)
   .then(() => console.log("資料庫連線成功"))
   .catch(() => console.error("資料庫連線失敗"));
 
